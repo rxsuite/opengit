@@ -26,6 +26,10 @@ go build -o opengit ./cmd/opengit
 
 Or use the prebuilt binaries: the `build` GitHub Actions workflow uploads `opengit-binaries` (macOS arm64/amd64, Linux, Windows) as a run artifact, and `./scripts/build.sh` builds them all locally into `dist/`. A downloaded unsigned binary is quarantined by macOS; clear it with `xattr -d com.apple.quarantine ./opengit-darwin-arm64 && chmod +x ./opengit-darwin-arm64`.
 
+### Windows (headless server)
+
+See [docs/WINDOWS.md](docs/WINDOWS.md): run it as a Windows service (`opengit service install ...`), firewall, HTTPS options and backups. Also new: `-tls-cert` / `-tls-key` for built-in HTTPS and graceful shutdown.
+
 ### Signed macOS releases
 
 `.github/workflows/release.yml` builds a universal binary, signs it with a Developer ID Application certificate, notarizes it with Apple, and publishes a GitHub Release when you push a tag (`git tag v0.1.0 && git push origin v0.1.0`). Add these repository secrets first (Settings > Secrets and variables > Actions):
