@@ -26,6 +26,20 @@ go build -o opengit ./cmd/opengit
 
 Or use the prebuilt binaries: the `build` GitHub Actions workflow uploads `opengit-binaries` (macOS arm64/amd64, Linux, Windows) as a run artifact, and `./scripts/build.sh` builds them all locally into `dist/`. A downloaded unsigned binary is quarantined by macOS; clear it with `xattr -d com.apple.quarantine ./opengit-darwin-arm64 && chmod +x ./opengit-darwin-arm64`.
 
+### Signed macOS releases
+
+`.github/workflows/release.yml` builds a universal binary, signs it with a Developer ID Application certificate, notarizes it with Apple, and publishes a GitHub Release when you push a tag (`git tag v0.1.0 && git push origin v0.1.0`). Add these repository secrets first (Settings > Secrets and variables > Actions):
+
+| Secret | What |
+|---|---|
+| `MACOS_CERT_P12` | base64 of your exported "Developer ID Application" certificate (`base64 -i cert.p12 \| pbcopy`) |
+| `MACOS_CERT_PASSWORD` | password you set when exporting the .p12 |
+| `MACOS_SIGN_IDENTITY` | e.g. `Developer ID Application: Your Name (TEAMID)` |
+| `APPLE_API_KEY_P8` | base64 of an App Store Connect API key (.p8) |
+| `APPLE_API_KEY_ID` / `APPLE_API_ISSUER_ID` | from App Store Connect > Users and Access > Integrations |
+
+Untested until the secrets exist; expect to fix small things on the first run.
+
 ## Use it from Claude Code (MCP)
 
 `opengit mcp` is a stdio MCP server that talks to a running OpenGit server. Tools: `list_repos`, `get_repo`, `create_repo`, `list_files`, `read_file`, `list_commits` (no delete tool, on purpose).
