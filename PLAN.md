@@ -75,7 +75,7 @@ Data layout: `data/repos/<owner>/<name>.git` (bare repos), `data/opengit.db`, `d
 
 | # | Milestone | Outcome |
 |---|---|---|
-| M0 | Skeleton | Repo layout, license (AGPL-3.0 or MIT/Apache, decide), CI on 3 OSes, config loading, SQLite migrations |
+| M0 | Skeleton | Repo layout, license (AGPL-3.0-or-later), CI on 3 OSes, config loading, SQLite migrations |
 | M1 | Git hosting | Create repo, clone/push over HTTP + SSH, user accounts, tokens |
 | M2 | Web UI read | File tree, README rendering, commit log, diffs, blame, branches/tags |
 | M3 | Collaboration | Issues, comments, labels, notifications (email optional) |
@@ -97,7 +97,7 @@ argon2id password hashing, CSRF protection, strict path sanitization for repo na
 
 ## 10. First steps
 
-1. Choose license and name.
-2. Decide Option A (fork Forgejo) vs Option B (from scratch).
+1. License: **AGPL-3.0-or-later** (decided). Choose name.
+2. Approach: **Option B, build from scratch** (decided).
 3. Scaffold the Go module, CI matrix, and SQLite migrations (M0).
 4. Prove the core in a spike: serve one bare repo over smart-HTTP and measure RSS on all three OSes.
