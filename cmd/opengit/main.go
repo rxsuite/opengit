@@ -5,7 +5,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
-	"os"
+	"time"
 
 	"github.com/rxsuite/opengit/internal/server"
 )
@@ -13,18 +13,15 @@ import (
 func main() {
 	addr := flag.String("addr", "127.0.0.1:3000", "listen address")
 	data := flag.String("data", "data", "data directory")
+	noReg := flag.Bool("disable-registration", false, "block signups once the first (admin) user exists")
 	flag.Parse()
 
-	s, err := server.New(server.Config{
-		DataDir: *data,
-		Token:   os.Getenv("OPENGIT_TOKEN"),
-	})
+	s, err := server.New(server.Config{DataDir: *data, DisableRegistration: *noReg})
 	if err != nil {
 		log.Fatal(err)
 	}
-	if os.Getenv("OPENGIT_TOKEN") == "" {
-		log.Print("warning: OPENGIT_TOKEN not set; anyone who can reach this server can create repos and push")
-	}
-	log.Printf("OpenGit listening on http://%s", *addr)
-	log.Fatal(http.ListenAndServe(*addr, s))
+	defer s.Close()
+	log.Printf("OpenGit listening on http://%s (first account registered becomes admin)", *addr)
+	srv := &http.Server{Addr: *addr, Handler: s, ReadHeaderTimeout: 10 * time.Second, IdleTimeout: 2 * time.Minute}
+	log.Fatal(srv.ListenAndServe())
 }

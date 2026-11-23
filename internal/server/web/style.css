@@ -1,0 +1,23 @@
+:root { color-scheme: dark; --bg:#0b0b12; --fg:#e8e6f0; --mut:#8a8799; --acc:#ff5fa8; --line:#23222e; }
+* { box-sizing: border-box }
+body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui,sans-serif }
+header, main { max-width:820px; margin:0 auto; padding:12px 16px }
+nav { display:flex; gap:16px; align-items:center }
+nav span { margin-left:auto; color:var(--mut) }
+a { color:var(--acc); text-decoration:none } a:hover { text-decoration:underline }
+canvas { width:100%; height:auto; aspect-ratio:16/9; display:block; border:1px solid var(--line); background:#000 }
+h2 { font-size:1rem; color:var(--mut); text-transform:uppercase; letter-spacing:.08em; margin:28px 0 8px }
+h2.big { font-size:1.4rem; color:var(--fg); text-transform:none; letter-spacing:0; margin:8px 0 }
+form { display:flex; gap:8px; flex-wrap:wrap; align-items:center }
+input:not([type=checkbox]) { flex:1 1 180px; padding:8px 10px; background:#14141d; color:var(--fg); border:1px solid var(--line); border-radius:6px }
+button { padding:8px 14px; background:var(--acc); color:#12060c; border:0; border-radius:6px; font-weight:600; cursor:pointer }
+button.alt { background:#23222e; color:var(--fg) }
+.list { list-style:none; margin:0; padding:0 }
+.list li { padding:8px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap }
+code { color:var(--mut); font-size:.85em }
+pre { background:#10101a; border:1px solid var(--line); padding:12px; overflow:auto; border-radius:6px; margin:8px 0 }
+pre.file { white-space:pre; font-size:.85em; max-height:70vh }
+.tag { font-size:.75em; border:1px solid var(--line); border-radius:99px; padding:0 8px; color:var(--mut) }
+.tabs { display:flex; gap:16px; border-bottom:1px solid var(--line); margin-bottom:8px } .tabs a { padding:6px 0 } .tabs a.on { border-bottom:2px solid var(--acc); color:var(--fg) }
+.crumbs { margin:8px 0; color:var(--mut) }
+.err { color:var(--acc); min-height:1.2em }

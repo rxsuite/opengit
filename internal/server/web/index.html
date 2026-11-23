@@ -4,58 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>OpenGit</title>
-<style>
-  :root { color-scheme: dark; --bg:#0b0b12; --fg:#e8e6f0; --mut:#8a8799; --acc:#ff5fa8; --line:#23222e; }
-  * { box-sizing: border-box }
-  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui,sans-serif }
-  main { max-width:760px; margin:0 auto; padding:16px }
-  canvas { width:100%; height:auto; aspect-ratio:16/9; display:block; border:1px solid var(--line); background:#000 }
-  h2 { font-size:1rem; color:var(--mut); text-transform:uppercase; letter-spacing:.08em; margin:28px 0 8px }
-  form { display:flex; gap:8px; flex-wrap:wrap }
-  input { flex:1 1 200px; padding:8px 10px; background:#14141d; color:var(--fg); border:1px solid var(--line); border-radius:6px }
-  button { padding:8px 14px; background:var(--acc); color:#12060c; border:0; border-radius:6px; font-weight:600; cursor:pointer }
-  ul { list-style:none; margin:0; padding:0 }
-  li { padding:10px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap }
-  code { color:var(--mut); word-break:break-all }
-  #msg { color:var(--acc); min-height:1.5em }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main>
-  <canvas id="logo" aria-label="OpenGit: an eye zooms into its pupil, revealing the name"></canvas>
-  <h2>New repository</h2>
-  <form id="new">
-    <input id="name" placeholder="repo-name" pattern="[A-Za-z0-9][A-Za-z0-9._-]*" required aria-label="Repository name">
-    <input id="token" type="password" placeholder="token (if server requires)" aria-label="Access token">
-    <button>Create</button>
-  </form>
-  <div id="msg" role="status"></div>
-  <h2>Repositories</h2>
-  <ul id="repos"></ul>
-</main>
+<header><nav id="nav" aria-label="Main"></nav></header>
+<main id="app"></main>
 <script src="logo.js"></script>
-<script>
-  OpenGitLogo.mount(document.getElementById('logo'));
-  var list = document.getElementById('repos'), msg = document.getElementById('msg');
-  function load() {
-    fetch('/api/repos').then(function (r) { return r.json(); }).then(function (rs) {
-      list.textContent = '';
-      if (!rs.length) { list.textContent = 'No repositories yet.'; return; }
-      rs.forEach(function (r) {
-        var li = document.createElement('li'), n = document.createElement('strong'), c = document.createElement('code');
-        n.textContent = r.name; c.textContent = 'git clone ' + location.origin + r.clone_url;
-        li.append(n, c); list.append(li);
-      });
-    });
-  }
-  document.getElementById('new').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var h = { 'Content-Type': 'application/json' }, tk = document.getElementById('token').value;
-    if (tk) h.Authorization = 'Bearer ' + tk;
-    fetch('/api/repos', { method: 'POST', headers: h, body: JSON.stringify({ name: document.getElementById('name').value }) })
-      .then(function (r) { msg.textContent = r.ok ? 'Created.' : (r.status === 401 ? 'Token required.' : 'Could not create (' + r.status + ').'); if (r.ok) load(); });
-  });
-  load();
-</script>
+<script src="app.js"></script>
 </body>
 </html>
