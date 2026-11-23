@@ -13,6 +13,34 @@ Working today:
 
 Not yet (roadmap in [PLAN.md](PLAN.md)): SSH, branches/tags UI, diffs, issues, pull requests, collaborators/orgs, webhooks, CI, markdown rendering. **It is not at GitHub parity yet.**
 
+## Try it on a Mac
+
+Easiest, no Gatekeeper warnings (needs `brew install go git`):
+
+```bash
+git clone https://github.com/rxsuite/opengit.git && cd opengit
+git checkout claude/wonderful-meitner-rnry7c
+go build -o opengit ./cmd/opengit
+./opengit -addr 127.0.0.1:3000 -data ./data
+```
+
+Or use the prebuilt binaries: the `build` GitHub Actions workflow uploads `opengit-binaries` (macOS arm64/amd64, Linux, Windows) as a run artifact, and `./scripts/build.sh` builds them all locally into `dist/`. A downloaded unsigned binary is quarantined by macOS; clear it with `xattr -d com.apple.quarantine ./opengit-darwin-arm64 && chmod +x ./opengit-darwin-arm64`.
+
+## Use it from Claude Code (MCP)
+
+`opengit mcp` is a stdio MCP server that talks to a running OpenGit server. Tools: `list_repos`, `get_repo`, `create_repo`, `list_files`, `read_file`, `list_commits` (no delete tool, on purpose).
+
+1. Start the server and create an account in the browser (or `curl -s -XPOST localhost:3000/api/register -d '{"username":"me","password":"a-long-password"}'`; the response contains a `token`).
+2. Register it with Claude Code, using the absolute path of your binary:
+
+```bash
+claude mcp add opengit --env OPENGIT_URL=http://127.0.0.1:3000 --env OPENGIT_TOKEN=ogt_your_token -- /absolute/path/to/opengit mcp
+```
+
+3. In Claude Code run `/mcp` to confirm `opengit` is connected, then ask e.g. "list my OpenGit repos" or "read README.md from me/hello".
+
+Keep the token private; it grants whatever your account can do. Leave `OPENGIT_TOKEN` unset for read-only access to public repos.
+
 ## Run
 
 ```bash
